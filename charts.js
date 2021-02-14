@@ -1,7 +1,7 @@
 function init() {
   // Grab a reference to the dropdown select element
   var selector = d3.select("#selDataset");
-
+  console.log("test 1");
   // Use the list of sample names to populate the select options
   d3.json("samples.json").then((data) => {
     var sampleNames = data.names;
@@ -17,6 +17,7 @@ function init() {
     var firstSample = sampleNames[0];
     buildCharts(firstSample);
     buildMetadata(firstSample);
+    console.log("Init");
   });
 }
 
@@ -27,11 +28,13 @@ function optionChanged(newSample) {
   // Fetch new data each time a new sample is selected
   buildMetadata(newSample);
   buildCharts(newSample);
+  console.log("function option changed");
   
 }
 
 // Demographics Panel 
 function buildMetadata(sample) {
+  console.log("Build Meta Data");
   d3.json("samples.json").then((data) => {
     var metadata = data.metadata;
     // Filter the data for the object with the desired sample number
@@ -55,6 +58,7 @@ function buildMetadata(sample) {
 
 //1. Create the buildCharts function.
 function buildCharts(sample) {
+  console.log("Build Charts Check");
   // 2. Use d3.json to load and retrieve the samples.json file 
   d3.json("samples.json").then((data) => {
     // 3. Create a variable that holds the samples array. 
@@ -63,7 +67,7 @@ function buildCharts(sample) {
     var sampleArray = samples.filter(sampleObj => sampleObj.id == sample);
     //  5. Create a variable that holds the first sample in the array.
     var result = sampleArray[0];
-    console.log(result); 
+    console.log(data); 
 
     //6. Create variables that hold the otu_ids, otu_labels, and sample_values.
     var otu_ids = result.otu_ids;
@@ -83,14 +87,16 @@ function buildCharts(sample) {
     var sorted_otu_labels = otu_labels.slice(0,10);
     console.log(sorted_sample_slice, sorted_otu_ids, sorted_otu_labels); 
 
-    var yticks = sorted_otu_ids.map(id => "OTU: " + id);
-    var yticks = sorted_sample_slice.map(sorted_sample_slice => sorted_sample_slice.sample_values);
-    console.log(yticks, sorted_sample_slice); 
+    var xticks = sorted_otu_ids.map(id => "OTU: " + id);
+    var yticks = sorted_sample_slice
+    //.map(sorted_sample_slice => sorted_sample_slice.sample_values);
+    console.log(xticks, yticks, sorted_sample_values, "Line 92"); 
+    console.log(sorted_sample_slice);
 
     ///8. Create the trace for the bar chart. 
     var trace = {
-      x: sorted_sample_values,
-      y: yticks,
+      x: yticks,
+      y: xticks,
       type: "bar",
       orientation: 'h',
       text: sorted_otu_labels // this creates the hovertext
