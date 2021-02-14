@@ -56,6 +56,8 @@ function buildMetadata(sample) {
   });
 }
 
+//D1 Use Plotly and JS to create functions to make a bar chart 
+
 //1. Create the buildCharts function.
 function buildCharts(sample) {
   console.log("Build Charts Check");
@@ -110,5 +112,32 @@ function buildCharts(sample) {
     };
     //10. Use Plotly to plot the data with the layout. 
     Plotly.newPlot("bar", barData, barLayout);
+
+    // D2- Use plotly to plot the data with the layout 
+    //1. create the trace for the bubble chart 
+    var trace ={
+      x: otu_ids, 
+      y: sample_values, 
+      text: otu_labels, 
+      type: "bubbles", 
+      mode: "markers", 
+      marker: {
+        color: otu_ids, 
+        opacity: [1, 0.8, 0.6, 0.4], 
+        size: sample_values
+      }
+    };
+    var bubbledata = [trace];
+
+    //2. Create the layout for the bubble charts 
+    var bubblelayout = {
+      title: "Bacteria Cultures per Sample", 
+      xaxis: {title: "OTU ID"}, 
+      showlegend: false, 
+      hovermode: d3.select(optionChanged)
+    };
+    
+    //3. Use plotly to plt the data with the layout 
+    Plotly.newPlot("bubble", bubbledata, bubblelayout); 
   });
 };
