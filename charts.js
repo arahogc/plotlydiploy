@@ -69,13 +69,19 @@ function buildCharts(sample) {
     var sampleArray = samples.filter(sampleObj => sampleObj.id == sample);
     //  5. Create a variable that holds the first sample in the array.
     var result = sampleArray[0];
+    console.log(result);
     console.log(data); 
 
     //6. Create variables that hold the otu_ids, otu_labels, and sample_values.
     var otu_ids = result.otu_ids;
     var otu_labels = result.otu_labels;
     var sample_values = result.sample_values;
-    console.log(otu_ids, otu_labels, sample_values); 
+    //create a variable that holds the washing frequency 
+    var metadata_array = data.metadata.filter(sampleObj => sampleObj.id == sample);
+    var md = metadata_array[0];
+    var wfreqs = md.wfreq;
+    console.log(wfreqs);
+    console.log(otu_ids, otu_labels, sample_values, ); 
 
     //7. Create the yticks for the bar chart.
     //Hint: Get the the top 10 otu_ids and map them in descending order  
@@ -92,7 +98,7 @@ function buildCharts(sample) {
     var xticks = sorted_otu_ids.map(id => "OTU: " + id);
     var yticks = sorted_sample_slice
     //.map(sorted_sample_slice => sorted_sample_slice.sample_values);
-    console.log(xticks, yticks, sorted_sample_values, "Line 92"); 
+    console.log(xticks, yticks, sorted_sample_values); 
     console.log(sorted_sample_slice);
 
     ///8. Create the trace for the bar chart. 
@@ -139,5 +145,30 @@ function buildCharts(sample) {
     
     //3. Use plotly to plt the data with the layout 
     Plotly.newPlot("bubble", bubbledata, bubblelayout); 
+
+    //D3- Use plotly to create a gauge 
+
+    
+  // 4. Create the trace for the gauge chart.
+    var gaugeData= [{
+      domain: {x: [0,1], y: [0,1]},
+      value: wfreqs,
+      title:  { text: "<b>Belly Button Washing Frequency</b> <br> <i>Scrubs per Week</i>"},
+      type: "indicator", 
+      mode: "gauge+number",
+      gauge: {
+        axis: { range: [null, 10]}, 
+      } 
+      }
+    ]; 
+     
+  // 5. Create the layout for the gauge chart.
+    var gaugeLayout = {  
+      width: 600, height: 450, 
+      margin: {t: 0, b:0 }
+    };
+
+  // 6. Use Plotly to plot the gauge data and layout.
+    Plotly.newPlot("gauge", gaugeData, gaugeLayout)
   });
 };
